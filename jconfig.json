@@ -6,6 +6,5 @@
       "@/components/*": ["./components/*"]
     }
   },
-
   "include": ["app/**/*", "components/**/*"]
 }
