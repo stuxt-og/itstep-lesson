@@ -1,43 +1,61 @@
 export default function Hero() {
   return (
-    <section id="hero" style={{ 
-      padding: '80px 0',
-      textAlign: 'center'
-    }}>
+    <section
+      id="hero"
+      style={{
+        padding: '80px 0',
+        textAlign: 'center',
+        backgroundColor: '#f8f9fa',
+      }}
+    >
       <div className="container">
-        <h1 style={{ 
-          fontSize: '48px', 
-          marginBottom: '20px',
-          background: 'linear-gradient(135deg, #8ab4f8, #c084fc)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent'
-        }}>
-          Ласкаво просимо
+        <h1
+          style={{
+            fontSize: '48px',
+            marginBottom: '20px',
+            background: 'linear-gradient(135deg, #0066cc, #7c3aed)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}
+        >
+          Оптимізація коду – це не розкіш, а необхідність
         </h1>
-        <p style={{ 
-          fontSize: '20px', 
-          color: '#888', 
-          maxWidth: '600px', 
-          margin: '0 auto 30px' 
-        }}>
-          Мінімалістичний лендінг на Next.js 16 з темною темою
+        <p
+          style={{
+            fontSize: '20px',
+            color: '#555',
+            maxWidth: '700px',
+            margin: '0 auto 30px',
+          }}
+        >
+          У сучасному світі швидкість, ефективність та продуктивність визначають
+          успіх будь-якого цифрового продукту. Дізнайтеся, чому оптимізація коду
+          має бути у вашому щоденному фокусі.
         </p>
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
-          <a href="#features" style={{
-            padding: '12px 32px',
-            background: '#8ab4f8',
-            color: '#0a0a0a',
-            borderRadius: '8px',
-            fontWeight: 'bold'
-          }}>
-            Почати
-          </a>
-          <a href="#contact" style={{
-            padding: '12px 32px',
-            border: '1px solid #333',
-            borderRadius: '8px'
-          }}>
+          <a
+            href="#benefits"
+            style={{
+              padding: '12px 32px',
+              background: '#0066cc',
+              color: '#ffffff',
+              borderRadius: '8px',
+              fontWeight: 'bold',
+              border: 'none',
+            }}
+          >
             Дізнатись більше
+          </a>
+          <a
+            href="#stats"
+            style={{
+              padding: '12px 32px',
+              border: '1px solid #ccc',
+              borderRadius: '8px',
+              color: '#333',
+            }}
+          >
+            Подивитись факти
           </a>
         </div>
       </div>

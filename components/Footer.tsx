@@ -5,7 +5,6 @@ export default function Footer() {
       style={{
         padding: '40px 0',
         borderTop: '1px solid #e0e0e0',
-        marginTop: '40px',
         backgroundColor: '#f8f9fa',
       }}
     >
@@ -21,19 +20,13 @@ export default function Footer() {
       >
         <div>
           <p style={{ color: '#666' }}>
-            © {new Date().getFullYear()} Мій лендінг
+            © {new Date().getFullYear()} CodeOptimize – ваш провідник у світі ефективного коду
           </p>
         </div>
         <div style={{ display: 'flex', gap: '20px' }}>
-          <a href="#" style={{ color: '#666' }}>
-            Twitter
-          </a>
-          <a href="#" style={{ color: '#666' }}>
-            GitHub
-          </a>
-          <a href="#" style={{ color: '#666' }}>
-            LinkedIn
-          </a>
+          <a href="#" style={{ color: '#666' }}>Twitter</a>
+          <a href="#" style={{ color: '#666' }}>GitHub</a>
+          <a href="#" style={{ color: '#666' }}>LinkedIn</a>
         </div>
       </div>
     </footer>

@@ -16,18 +16,12 @@ export default function Header() {
         }}
       >
         <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#1a1a1a' }}>
-          🚀 Лендінг
+          ⚡ CodeOptimize
         </div>
         <nav style={{ display: 'flex', gap: '24px' }}>
-          <a href="#hero" style={{ color: '#333' }}>
-            Головна
-          </a>
-          <a href="#features" style={{ color: '#333' }}>
-            Можливості
-          </a>
-          <a href="#contact" style={{ color: '#333' }}>
-            Контакти
-          </a>
+          <a href="#benefits" style={{ color: '#333' }}>Чому?</a>
+          <a href="#stats" style={{ color: '#333' }}>Факти</a>
+          <a href="#contact" style={{ color: '#333' }}>Контакти</a>
         </nav>
       </div>
     </header>

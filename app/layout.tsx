@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Мій лендінг',
-  description: 'Мінімальний лендінг на Next.js 16',
+  title: 'Оптимізація коду – запорука успіху',
+  description: 'Чому оптимізація коду залишається обов\'язковим заняттям у сучасному світі',
 };
 
 export default function RootLayout({
