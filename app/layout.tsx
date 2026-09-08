@@ -1,16 +1,9 @@
-import type { Metadata } from 'next';
-import './globals.css';
-
-export const metadata: Metadata = {
-  title: 'Оптимізація коду – запорука успіху',
-  description: 'Чому оптимізація коду залишається обов\'язковим заняттям у сучасному світі',
+export const metadata = {
+  title: 'Telegram Bot',
+  description: 'Next.js Telegram Bot Webhook',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }) {
   return (
     <html lang="uk">
       <body>{children}</body>
