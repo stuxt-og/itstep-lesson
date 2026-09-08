@@ -3,7 +3,7 @@ import {
   answerCallbackQuery, 
   mainMenuKeyboard, 
   inlineButtons 
-} from '@/lib/bot';
+} from '../../../lib/bot';
 
 export async function POST(request) {
   try {
