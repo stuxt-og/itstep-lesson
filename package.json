@@ -1,6 +1,6 @@
 {
-  "name": "my-landing",
-  "version": "0.1.0",
+  "name": "optimization-bot",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,13 +8,9 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "^16.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^26.5.0",
-    "@types/react": "^19.2.18",
-    "typescript": "^7.0.2"
+    "next": "16.0.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "node-fetch": "2.7.0"
   }
 }
