@@ -3,7 +3,7 @@ import {
   handleMessage,
   handleCallback,
   texts,
-} from '@/lib/bot';
+} from '../../lib/bot';
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
