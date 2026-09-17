@@ -6,13 +6,6 @@ from openai import OpenAI
 load_dotenv()  # OPENAI_API_KEY from env variables
 
 def load_posts(path: Path) -> list[str]:
-    """
-    Читає файл і повертає список постів.
-    Підтримує два формати:
-      1) Пости, розділені порожнім рядком (абзаци).
-      2) Один пост на рядок.
-    Автоматично визначає, який формат використано.
-    """
     if not path.exists():
         raise FileNotFoundError(f"Файл {path} не знайдено. Створіть його та вставте пости.")
 
