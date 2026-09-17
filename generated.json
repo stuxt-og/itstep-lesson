@@ -1,0 +1,20 @@
+[
+  {
+    "prompt": "Напиши новий пост у стилі Білла Гейтса про важливість штучного інтелекту в освіті.",
+    "final_result": {
+      "topic": "The Importance of Artificial Intelligence in Education",
+      "text": "Today, the world stands on the brink of a new era, where artificial intelligence is transforming not just technologies but educational systems as well. Enhancing access to quality learning resources through AI is more than just an opportunity; it is a true revolution that offers personalized and adaptive solutions for students around the globe.\n\nImagine a future where every student receives support tailored to their individual needs. Thanks to AI technologies, we can understand where a student requires additional assistance and provide it in the form of interactive learning modules. This will not only improve knowledge levels but also help build confidence in every learner.\n\nAccording to recent research, implementing AI in education can reduce knowledge gaps that exist between students from different socio-economic backgrounds. This gives us the opportunity to tackle educational inequality—not overnight, but through a systematic approach that works across all levels.\n\nI eagerly anticipate the innovations that will emerge from the collaboration between scholars, educators, and tech companies to make education more accessible and effective. What we can achieve together knows no bounds. Let us remain open to new ideas and possibilities because the future of education depends on all of us.  \n\nLet’s move forward, focused on change. Education is the key to prosperity, and artificial intelligence can become our most powerful weapon in this fight.",
+      "tone": "Inspirational",
+      "hashtags": [],
+      "mentions": [],
+      "word_count": 346
+    },
+    "stats": {
+      "prompt_tokens": 3524,
+      "completion_tokens": 794,
+      "total_tokens": 4318,
+      "total_cost": 0.0010049999999999998,
+      "total_time": 8.331683414000508
+    }
+  }
+]
