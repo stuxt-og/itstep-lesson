@@ -1,22 +1,88 @@
-import turtle
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+from openai import OpenAI
 
-t = turtle.Turtle()
-t.speed(5)
-t.pensize(5)
+load_dotenv()  # OPENAI_API_KEY from env variables
 
-def draw_ring(x, y, color):
-    t.penup()
-    t.goto(x, y - 50)
-    t.pendown()
-    t.color(color)
-    t.circle(50)
+def load_posts(path: Path) -> list[str]:
+    """
+    Читає файл і повертає список постів.
+    Підтримує два формати:
+      1) Пости, розділені порожнім рядком (абзаци).
+      2) Один пост на рядок.
+    Автоматично визначає, який формат використано.
+    """
+    if not path.exists():
+        raise FileNotFoundError(f"Файл {path} не знайдено. Створіть його та вставте пости.")
 
-draw_ring(-110, 0, "blue")
-draw_ring(0, 0, "black")
-draw_ring(110, 0, "red")
+    text = path.read_text(encoding="utf-8").strip()
+    if not text:
+        raise ValueError(f"Файл {path} порожній.")
 
-draw_ring(-55, -60, "yellow")
-draw_ring(55, -60, "green")
+    if "\n\n" in text:
+        posts = [block.strip() for block in text.split("\n\n") if block.strip()]
+    else:
+        posts = [line.strip() for line in text.splitlines() if line.strip()]
 
-t.hideturtle()
-turtle.exitonclick()
+    return posts
+
+
+def mimic_style(posts: list[str], user_prompt: str) -> str:
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+    samples = "\n---\n".join(posts)
+
+    system_prompt = (
+        "Ти — імітатор, створений для відтворення стилю письма Білла Гейтса. "
+        "Тобі надано набір зразків дописів, написаних Біллом Гейтсом. "
+        "Твоє завдання — імітувати його стиль письма, приділяючи пильну увагу "
+        "лексичному багатству та різноманітності, структурі речень, пунктуації, "
+        "виразам та ідіомам, а також загальному тону, емоційному забарвленню та настрою. "
+        "Переконайся, що згенерований текст неможливо відрізнити від наданих зразків.\n\n"
+        f"Зразки дописів:\n{samples}"
+    )
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini-2024-07-18",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        max_tokens=300
+    )
+
+    return response.choices[0].message.content
+
+
+def main():
+    POSTS_FILE = Path("posts.txt")
+
+    print(f"Читаємо пости з {POSTS_FILE}...")
+    try:
+        posts = load_posts(POSTS_FILE)
+    except Exception as e:
+        print(f"Помилка читання файлу: {e}")
+        return
+
+    print(f"Завантажено {len(posts)} постів.\n")
+
+    while True:
+        prompt = input("Промпт (Enter для прикладу): ").strip()
+        if not prompt:
+            prompt = "Напиши новий пост у стилі Білла Гейтса про важливість штучного інтелекту в освіті."
+        elif prompt == "стоп":
+            break
+
+        try:
+            result = mimic_style(posts, prompt)
+        except Exception as e:
+            print(f"Помилка OpenAI API: {e}")
+            return
+
+        print("Згенерований текст:\n")
+        print(result)
+
+
+if __name__ == "__main__":
+    main()
