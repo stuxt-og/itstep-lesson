@@ -6,15 +6,25 @@ from openai import OpenAI
 
 load_dotenv()  # OPENAI_API_KEY from env variables
 
-def load_posts(path: Path) -> list[str]:
+def load_posts(path: Path) -> list[dict]:
     if not path.exists():
         raise FileNotFoundError(f"Файл {path} не знайдено.")
 
     with path.open("r", encoding="utf-8") as f:
         data = json.load(f)
 
-    posts = data.get("posts", [])
-    posts = [p.strip() for p in posts if isinstance(p, str) and p.strip()]
+    raw_posts = data.get("posts", [])
+    posts = []
+    for entry in raw_posts:
+        if not isinstance(entry, dict):
+            continue
+        text = entry.get("text")
+        if not isinstance(text, str) or not text.strip():
+            continue
+        posts.append({
+            "id": entry.get("id"),
+            "text": text.strip(),
+        })
 
     if not posts:
         raise ValueError(f"У файлі {path} немає жодного поста.")
@@ -22,10 +32,10 @@ def load_posts(path: Path) -> list[str]:
     return posts
 
 
-def mimic_style(posts: list[str], user_prompt: str) -> str:
+def mimic_style(posts: list[dict], user_prompt: str) -> str:
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    samples = "\n---\n".join(posts)
+    samples = "\n---\n".join(p["text"] for p in posts)
 
     system_prompt = (
         "Ти — імітатор, створений для відтворення стилю письма Білла Гейтса. "
