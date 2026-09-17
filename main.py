@@ -1,10 +1,48 @@
 import json
-import os
 from pathlib import Path
 from dotenv import load_dotenv
 from openai import OpenAI
 
-load_dotenv()  # OPENAI_API_KEY from env variables
+load_dotenv()
+
+RESPONSE_SCHEMA = {
+    "name": "bill_gates_post",
+    "strict": True,
+    "schema": {
+        "type": "object",
+        "properties": {
+            "topic": {
+                "type": "string",
+                "description": "Тема згенерованого допису."
+            },
+            "text": {
+                "type": "string",
+                "description": "Згенерований текст допису у стилі Білла Гейтса."
+            },
+            "tone": {
+                "type": "string",
+                "description": "Загальний тон допису (наприклад: оптимістичний, стурбований, надихаючий)."
+            },
+            "hashtags": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Доречні хештеги без символу #."
+            },
+            "mentions": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Доречні згадки без символу @."
+            },
+            "word_count": {
+                "type": "integer",
+                "description": "Кількість слів у згенерованому тексті."
+            }
+        },
+        "required": ["topic", "text", "tone", "hashtags", "mentions", "word_count"],
+        "additionalProperties": False
+    }
+}
+
 
 def load_posts(path: Path) -> list[dict]:
     if not path.exists():
@@ -32,8 +70,8 @@ def load_posts(path: Path) -> list[dict]:
     return posts
 
 
-def mimic_style(posts: list[dict], user_prompt: str) -> str:
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+def mimic_style(posts: list[dict], user_prompt: str) -> dict:
+    client = OpenAI()
 
     samples = "\n---\n".join(p["text"] for p in posts)
 
@@ -53,10 +91,15 @@ def mimic_style(posts: list[dict], user_prompt: str) -> str:
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
         ],
-        max_tokens=300
+        max_tokens=500,
+        response_format={
+            "type": "json_schema",
+            "json_schema": RESPONSE_SCHEMA,
+        },
     )
 
-    return response.choices[0].message.content
+    content = response.choices[0].message.content
+    return json.loads(content)
 
 
 def main():
@@ -84,8 +127,9 @@ def main():
             print(f"Помилка OpenAI API: {e}")
             return
 
-        print("Згенерований текст:\n")
-        print(result)
+        print("Згенерований JSON:\n")
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        print()
 
 
 if __name__ == "__main__":
