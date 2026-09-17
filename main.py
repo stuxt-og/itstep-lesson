@@ -5,6 +5,9 @@ from openai import OpenAI
 
 load_dotenv()
 
+INPUT_PRICE_PER_1M = 0.15
+OUTPUT_PRICE_PER_1M = 0.60
+
 RESPONSE_SCHEMA = {
     "name": "bill_gates_post",
     "strict": True,
@@ -70,7 +73,17 @@ def load_posts(path: Path) -> list[dict]:
     return posts
 
 
-def mimic_style(posts: list[dict], user_prompt: str) -> dict:
+def calculate_cost(prompt_tokens: int, completion_tokens: int) -> dict:
+    input_cost = prompt_tokens * INPUT_PRICE_PER_1M / 1_000_000
+    output_cost = completion_tokens * OUTPUT_PRICE_PER_1M / 1_000_000
+    return {
+        "input_cost": input_cost,
+        "output_cost": output_cost,
+        "total_cost": input_cost + output_cost,
+    }
+
+
+def mimic_style(posts: list[dict], user_prompt: str) -> tuple[dict, dict]:
     client = OpenAI()
 
     samples = "\n---\n".join(p["text"] for p in posts)
@@ -99,7 +112,19 @@ def mimic_style(posts: list[dict], user_prompt: str) -> dict:
     )
 
     content = response.choices[0].message.content
-    return json.loads(content)
+    result = json.loads(content)
+
+    usage = {
+        "prompt_tokens": response.usage.prompt_tokens,
+        "completion_tokens": response.usage.completion_tokens,
+        "total_tokens": response.usage.total_tokens,
+    }
+
+    return result, usage
+
+
+def format_cost(cost: float) -> str:
+    return f"${cost:.6f}"
 
 
 def main():
@@ -114,6 +139,10 @@ def main():
 
     print(f"Завантажено {len(posts)} постів.\n")
 
+    total_prompt_tokens = 0
+    total_completion_tokens = 0
+    total_cost = 0.0
+
     while True:
         prompt = input("Промпт (Enter для прикладу): ").strip()
         if not prompt:
@@ -122,13 +151,37 @@ def main():
             break
 
         try:
-            result = mimic_style(posts, prompt)
+            result, usage = mimic_style(posts, prompt)
         except Exception as e:
             print(f"Помилка OpenAI API: {e}")
             return
 
+        cost = calculate_cost(usage["prompt_tokens"], usage["completion_tokens"])
+
+        total_prompt_tokens += usage["prompt_tokens"]
+        total_completion_tokens += usage["completion_tokens"]
+        total_cost += cost["total_cost"]
+
         print("Згенерований JSON:\n")
         print(json.dumps(result, ensure_ascii=False, indent=2))
+
+        print("\nСтатистика запиту:")
+        print(f"Вхідні токени:  {usage['prompt_tokens']}")
+        print(f"Вихідні токени: {usage['completion_tokens']}")
+        print(f"Всього токенів: {usage['total_tokens']}")
+        print(f"Вартість входу:  {format_cost(cost['input_cost'])}")
+        print(f"Вартість виходу: {format_cost(cost['output_cost'])}")
+        print(f"Вартість разом:  {format_cost(cost['total_cost'])}")
+        print()
+
+    if total_prompt_tokens > 0:
+        print("=" * 40)
+        print("ЗАГАЛЬНА СТАТИСТИКА СЕСІЇ")
+        print("=" * 40)
+        print(f"Вхідні токени:  {total_prompt_tokens}")
+        print(f"Вихідні токени: {total_completion_tokens}")
+        print(f"Всього токенів: {total_prompt_tokens + total_completion_tokens}")
+        print(f"Загальна вартість: ${total_cost:.6f}")
         print()
 
 
