@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -7,16 +8,16 @@ load_dotenv()  # OPENAI_API_KEY from env variables
 
 def load_posts(path: Path) -> list[str]:
     if not path.exists():
-        raise FileNotFoundError(f"Файл {path} не знайдено. Створіть його та вставте пости.")
+        raise FileNotFoundError(f"Файл {path} не знайдено.")
 
-    text = path.read_text(encoding="utf-8").strip()
-    if not text:
-        raise ValueError(f"Файл {path} порожній.")
+    with path.open("r", encoding="utf-8") as f:
+        data = json.load(f)
 
-    if "\n\n" in text:
-        posts = [block.strip() for block in text.split("\n\n") if block.strip()]
-    else:
-        posts = [line.strip() for line in text.splitlines() if line.strip()]
+    posts = data.get("posts", [])
+    posts = [p.strip() for p in posts if isinstance(p, str) and p.strip()]
+
+    if not posts:
+        raise ValueError(f"У файлі {path} немає жодного поста.")
 
     return posts
 
@@ -49,7 +50,7 @@ def mimic_style(posts: list[str], user_prompt: str) -> str:
 
 
 def main():
-    POSTS_FILE = Path("posts.txt")
+    POSTS_FILE = Path("posts.json")
 
     print(f"Читаємо пости з {POSTS_FILE}...")
     try:
